@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ title }}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'inc/_sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+    {% for item in tasks %}
+    <a href="{% url 'home_details' item.pk %}">
+    <div class="card-body rounded text">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" name="" id="checkens">
+        {{item.title}}
+      </div>
+    </div>
+    </a>
+
+    {% endfor %}
+{% endblock %}

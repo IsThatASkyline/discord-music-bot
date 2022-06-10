@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+<script src="https://malsup.github.io/jquery.form.js"></script>
+
+
+{% block title %}
+Create task
+{% endblock %}
+<body>
+{% block sidebar %}
+{% include 'inc/_sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+
+    <form id="myForm" action="" method="post">
+    {% csrf_token %}
+    {{ form|crispy }}
+    </form>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+          <script>
+              $(document).ready(function () {
+                  // отслеживаем событие отправки формы
+                  $('#myForm').submit(function () {
+                      // создаем AJAX-вызов
+                      $.ajax({
+                          data: $(this).serialize(), // получаем данные формы
+                          type: $(this).attr('method'), // GET или POST
+                          url: "{% url 'create-task' %}",
+                          // если успешно, то
+                          success: function (json) {
+                            document.getElementById("myForm").reset();
+                                $("#tasks").prepend(
+                                     '<a href="#">' +
+                                    '<div class="card-body rounded text">' +
+                                      '<div class="form-check">' +
+                                        '<input class="form-check-input" type="checkbox" name="" id="chickens">' +
+                                        json.title +
+                                      '</div>' +
+                                    '</div>' +
+                                    '</a>'
+                            )
+                            },
+
+                          // если ошибка, то
+                          error: function (response) {
+                              // предупредим об ошибке
+                              alert(response.responseJSON.errors);
+                              console.log(response.responseJSON.errors)
+                          }
+                      });
+                      return false;
+                  });
+              })
+          </script>
+    <div id="tasks">
+        {% for item in tasks %}
+           <a href="#">
+        <div class="card-body rounded text">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="" id="chickens">
+            {{item.title}}
+          </div>
+        </div>
+        </a>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
+
+</body>

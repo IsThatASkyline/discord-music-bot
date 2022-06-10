@@ -1,0 +1,49 @@
+
+        $('#container').on('click', '.form-check-input', function(e) {
+        e.preventDefault();
+
+
+         var task_id = $(this).attr('name');
+         var status = $(this).prop('checked');
+         $.ajax({
+                type: 'POST',
+                url: "{% url 'change_checkbox' %}",
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    'id': task_id,
+                    'is_done': status,
+                },
+                    success: function (json) {
+
+                        if (status == true) {
+
+                            $(".a_"+task_id).detach();
+                            $("#done").prepend(
+                             '<a class="a_'+task_id+'"href="#">' +
+                                '<div class="card-body rounded text">' +
+                                   '<div class="form-check">' +
+                                      '<input class="form-check-input" type="checkbox" name="" id="chickens" checked>' +
+                                       json.title +
+                                    '</div>' +
+                                '</div>' +
+                             '</a>'
+                             );
+                        }
+                        else if (status == false) {
+
+                            $(".a_"+task_id).detach();
+                            $("#tasks").prepend(
+                             '<a class="a_'+task_id+'"href="#">' +
+                                '<div class="card-body rounded text">' +
+                                   '<div class="form-check">' +
+                                      '<input class="form-check-input" type="checkbox" name="" id="chickens">' +
+                                       json.title +
+                                    '</div>' +
+                                '</div>' +
+                             '</a>'
+                             );
+                        };
+                    },
+            });
+
+         });

@@ -1,0 +1,174 @@
+html{
+    height: 100%;
+}
+body{
+    height: 100%;
+}
+.col {
+    background: url(truebg.jpg) 100% 100% no-repeat;
+    padding: 0rem;
+}
+.card-body {
+    color: #333333;
+    font-weight: 600;
+    margin-top: 0.4rem;
+    background: white;
+    border: 1px solid #cccccc;
+    padding: 0.8rem;
+    margin-left: 1rem;
+}
+.form-check .form-check-input {
+    margin-right: 0.8rem;
+}
+
+.container {
+    height: 94%;
+    width: 100%;
+    padding-right: 0;
+    padding-left: 0;
+    margin-right: 0;
+    margin-left: 0;
+}
+.container-fluid {
+    height: 94%;
+    max-width: 100%;
+    padding-right: 0rem;
+    padding-left: 0rem;
+}
+.col-md-3 {
+    background: #f3f2f1;
+    padding-right: 0;
+    padding-left: 0rem;
+    width: 15%;
+}
+.list-group-item {
+    background: #f3f2f1;
+    border: None;
+    padding-left: 2rem;
+}
+.badge{
+    position: absolute;
+    right: 5%;
+    top: 25%;
+}
+.row {
+    height: 100%;
+    margin-right: 0;
+    margin-left: 0;
+    padding-left: 0rem;
+    padding-right: 0rem;
+}
+.navbar{
+    height: 6%;
+}
+
+.navbar-brand {
+    padding-left: 1.5rem;
+}
+.navbar-text {
+    padding-right: 1.5rem;
+}
+.form-check-label {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+div.text:hover {
+  color: #333333;
+}
+a{
+    color: #333333;
+    text-decoration: None;
+}
+.rightbar {
+    background: white;
+    margin-top: 1rem;
+    margin-right: 1rem;
+}
+.col-md-9 {
+    padding-left: 0rem;
+    padding-bottom: 0rem;
+}
+
+.mb-3 {
+    margin-left: 1rem;
+    margin-top: 2rem;
+}
+
+.no-border {
+    box-shadow: none !important; /* You may want to include this as bootstrap applies these styles too */
+}
+.form-check{
+    padding-left: 1.8rem;
+}
+.form-control {
+    padding: 0.9rem 0.75rem;
+    background: rgba(0, 0, 0, 0.3) !important;
+    font-weight: 600;
+    border: 0;
+    color: white !important;
+    border-radius: 0.5rem;
+}
+
+.checked {
+    border-color: #cccccc;
+}
+
+.control-group{
+    margin-left: 1rem;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+}
+
+
+
+#id_title::placeholder{
+    opacity: 0.6 !important;
+    color:white !important;
+}
+
+.create-category{
+    width: 15%;
+    bottom: 0;
+    position: fixed;
+    height: 3rem;
+}
+
+#update-title {
+    width:70%;
+    border: 0;
+    margin-top: 0.4rem;
+    height:2rem;
+    outline:none;
+}
+#update-title::placeholder{
+    color: black;
+}
+#update-title:focus::placeholder{
+    color: white;
+}
+.rounded {
+    border-radius: 0.50rem!important;
+}
+
+.active {
+    background: #d0e3f7;
+}
+
+.update-form-title {
+    margin-top: 0.5rem;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+}
+
+.update-form-content {
+    border-top: solid;
+    border-color: #b3b3b3;
+    border-width: 0.1rem;
+}
+
+.detail-checkbox {
+    margin-left: 1.5rem;
+    margin-right: 0.7rem;
+    margin-top: 1rem;
+}

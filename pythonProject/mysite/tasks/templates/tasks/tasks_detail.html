@@ -1,0 +1,219 @@
+{% extends 'base.html' %}
+
+{% load static %} <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+{% block title %}
+  {{ task_title }}
+{% endblock %}
+
+{% block sidebar %}
+{% include 'inc/_sidebar.html' %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid ">
+    <div class="row">
+    <div class="col-md-9">
+       <form id="myForm" action="" method="post">
+    {% csrf_token %}
+    <div class="control-group">
+        {{ form.title }}
+    </div>
+
+    <div class="form-group">
+    <input type="hidden" id="category" name="category" value="{{ category_id }}">
+    <input type="hidden" id="user" name="user" value="{{ user }}">
+    </div>
+    </form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+              let task_form = document.getElementById('myForm');
+                   $(task_form).submit(function(e) {
+                        console.log("СКРИПТ ДЛЯ ИНПУТ 1")
+                        $.ajax({
+                          data: $(this).serialize(),
+                          type: $(this).attr('method'),
+                          url: "{% url 'create_task' category_id %}",
+                          success: function (json) {
+                            document.getElementById("myForm").reset();
+                            $("#tasks").prepend(
+                             '<a class="a_'+json.new_task_id+'" href="/'+json.category_id+'/'+json.new_task_id+'/details">' +
+                                '<div class="card-body rounded text">' +
+                                   '<div class="form-check">' +
+                                      '<input class="form-check-input" type="checkbox" name="'+json.new_task_id+'">' +
+                                       json.title +
+                                    '</div>' +
+                                '</div>' +
+                             '</a>'
+                            )
+                            },
+
+
+                          error: function (response) {
+
+                              alert(response.responseJSON.errors);
+                              console.log(response.responseJSON.errors)
+                          }
+                      });
+                      return false;
+              })
+          </script>
+    <div id="tasks">
+    {% for item in tasks %}
+        <a class="a_{{item.pk}}" href="{% url 'view_tasks' item.category.id item.pk %}">
+        {% if item.pk == pk %}
+            <div class="card-body active rounded text" name="active" value="{{ item.pk }}">
+        {% else %}
+            <div class="card-body rounded text">
+        {% endif %}
+          <div class="form-check">
+            {% if item.is_done == 1 %}
+                <input class="form-check-input checked no-border" type="checkbox" name="{{ item.pk }}" id="checked"
+                   checked>
+
+            {% else %}
+                <input class="form-check-input no-border" type="checkbox" name="{{ item.pk }}" id="uncheked">
+            {% endif %}
+            {{item.title}}
+          </div>
+        </div>
+        </a>
+    {% endfor %}
+    </div>
+<div id="done">
+</div>
+</div>
+<div class="col rightbar rounded">
+            <form id="updateForm" action="" method="post">
+            {% csrf_token %}
+            <div class="update-form-title no-border">
+
+                    {% if target_task.is_done == 1 %}
+                        <input class="form-check-input checked no-border detail-checkbox" type="checkbox"
+                               name="{{ target_task.pk }}"
+                               checked>
+                    {% else %}
+                        <input class="form-check-input no-border detail-checkbox" type="checkbox"
+                               name="{{ target_task.pk }}">
+                    {% endif %}
+
+                <input id="update-title"  type="text" name="title" placeholder="{{target_task.title}}">
+
+            </div>
+            <div class="update-form-content">
+
+            </div>
+             </form>
+    <script>
+                   $('#updateForm').submit(function(e) {
+                        e.preventDefault();
+
+                        console.log("СКРИПТ ДЛЯ ИНПУТ 3");
+                         $.ajax({
+                         data: $(this).serialize(),
+                          type: 'POST',
+                          url: "{% url 'update_task' pk %}",
+                          success: function (json) {
+                            document.getElementById("updateForm").reset();
+                            },
+
+                      });
+                      return false;
+              })
+    </script>
+
+</div>
+    <script>
+    $(function() {
+        var active_task = document.getElementsByClassName("active")[0].getAttribute('value');
+        $(document).on('change', '.form-check-input', function(e) {
+        console.log("СКРИПТ ДЛЯ ЧЕКБОКСОВ")
+        e.preventDefault();
+
+
+         var task_id = $(this).attr('name');
+         var status = $(this).prop('checked');
+         $.ajax({
+                type: 'POST',
+                url: "{% url 'change_checkbox' %}",
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    'id': task_id,
+                    'is_done': status,
+                },
+                    success: function (json) {
+
+                        console.log(active_task);
+                        if (task_id == active_task) {
+                             if (status == true) {
+
+                                $(".a_"+task_id).detach();
+                                $("#done").prepend(
+                                 '<a class="a_'+json.new_task_id+'" href="/'+json.category_id+'/'+task_id+'/details">' +
+                                    '<div class="card-body active rounded text">' +
+                                       '<div class="form-check">' +
+                                          '<input class="form-check-input" type="checkbox" name="'+json.new_task_id+'" checked>' +
+                                           json.title +
+                                        '</div>' +
+                                    '</div>' +
+                                 '</a>'
+                                 );
+                             }
+                             else if (status == false) {
+
+                                    $(".a_"+task_id).detach();
+                                    $("#tasks").prepend(
+                                     '<a class="a_'+json.new_task_id+'" href="/'+json.category_id+'/'+task_id+'/details">' +
+                                        '<div class="card-body active rounded text">' +
+                                           '<div class="form-check">' +
+                                              '<input class="form-check-input" type="checkbox" name="'+json.new_task_id+'">' +
+                                               json.title +
+                                            '</div>' +
+                                        '</div>' +
+                                     '</a>'
+                                     );
+                             };
+                        }
+                        else {
+                                if (status == true) {
+
+                                $(".a_"+task_id).detach();
+                                $("#done").prepend(
+                                 '<a class="a_'+json.new_task_id+'" href="/'+json.category_id+'/'+task_id+'/details">' +
+                                    '<div class="card-body rounded text">' +
+                                       '<div class="form-check">' +
+                                          '<input class="form-check-input" type="checkbox" name="'+json.new_task_id+'" checked>' +
+                                           json.title +
+                                        '</div>' +
+                                    '</div>' +
+                                 '</a>'
+                                 );
+                             }
+                                 else if (status == false) {
+
+                                        $(".a_"+task_id).detach();
+                                        $("#tasks").prepend(
+                                         '<a class="a_'+json.new_task_id+'" href="/'+json.category_id+'/'+task_id+'/details">' +
+                                            '<div class="card-body rounded text">' +
+                                               '<div class="form-check">' +
+                                                  '<input class="form-check-input" type="checkbox" name="'+json.new_task_id+'">' +
+                                                   json.title +
+                                                '</div>' +
+                                            '</div>' +
+                                         '</a>'
+                                         );
+                                 };
+
+                        };
+                },
+            });
+
+         });
+    });
+       </script>
+
+
+{% endblock %}
+
+
