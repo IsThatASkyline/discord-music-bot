@@ -22,14 +22,14 @@ async def play(ctx, url):
         vc = await ctx.message.author.voice.channel.connect()
 
         with YoutubeDL(YDL_OPTIONS) as ydl:
-            file = ydl.extract_info(url, download=True)
-        guild = ctx.message.guild
-        voice_client = guild.voice_client
+            if 'https://' in url:
+                info = ydl.extract_info(url, download=False)
+            else:
+                info = ydl.extract_info(f'ytsearch:{url}', download=False)['entries'][0]
 
-        path = str(file['title']) + "-" + str(file['id'] + ".mp3")
+        link = info['formats'][0]['url']
 
-        voice_client.play(discord.FFmpegPCMAudio(path))
-        voice_client.source = discord.PCMVolumeTransformer(voice_client.source, 1)
+        vc.play(discord.FFmpegPCMAudio(executable='vendor/ffmpeg', source=link, **FFMPEG_OPTIONS))
 
 @bot.command()
 async def stop(ctx):
