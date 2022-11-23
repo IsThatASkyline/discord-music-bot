@@ -19,17 +19,15 @@ async def play(ctx, url):
     elif ctx.guild.voice_client:
         return await ctx.send("Уже играет нереальный трек, жди пока он закончится")
     else:
-        vc = await ctx.message.author.voice.channel.connect()
-
         with YoutubeDL(YDL_OPTIONS) as ydl:
-            if 'https://' in url:
-                info = ydl.extract_info(url, download=False)
-            else:
-                info = ydl.extract_info(f'ytsearch:{url}', download=False)['entries'][0]
+            file = ydl.extract_info(url, download=True)
+            path = str(file['title']) + "-" + str(file['id'] + ".mp3")
 
-        link = info['formats'][0]['url']
+        channel = bot.get_channel(1044925273281404952)
+        vc = await channel.connect()
 
-        vc.play(discord.FFmpegPCMAudio(executable='vendor/ffmpeg', source=link, **FFMPEG_OPTIONS))
+        vc.play(discord.FFmpegPCMAudio(path))
+        vc.source = discord.PCMVolumeTransformer(vc.source, 1)
 
 @bot.command()
 async def stop(ctx):
