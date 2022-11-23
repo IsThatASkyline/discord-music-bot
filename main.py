@@ -29,7 +29,7 @@ async def play(ctx, url):
 
         link = info['formats'][0]['url']
 
-        vc.play(discord.FFmpegPCMAudio(executable='ffmpeg\\ffmpeg.exe', source=link, **FFMPEG_OPTIONS))
+        vc.play(discord.FFmpegPCMAudio(executable='ffmpeg.exe', source=link, **FFMPEG_OPTIONS))
 
 @bot.command()
 async def stop(ctx):
