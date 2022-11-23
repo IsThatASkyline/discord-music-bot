@@ -26,7 +26,7 @@ async def play(ctx, url):
         channel = bot.get_channel(1044925273281404952)
         vc = await channel.connect()
 
-        vc.play(discord.FFmpegPCMAudio(path))
+        vc.play(discord.FFmpegPCMAudio(path), after=None)
         vc.source = discord.PCMVolumeTransformer(vc.source, 1)
 
 @bot.command()
