@@ -43,7 +43,7 @@ async def play(ctx, url):
             queue.append(link)
             return await ctx.send("Добавил твой трек в очередь")
         else:
-            await ctx.send("Иди нахуй хуесос")
+            return await ctx.send("Иди нахуй хуесос")
     else:
         if ctx.message.author.id in access_ids:
             with YoutubeDL(YDL_OPTIONS) as ydl:
@@ -56,7 +56,7 @@ async def play(ctx, url):
             print(link)
             vc.play(discord.FFmpegPCMAudio(source=link, **FFMPEG_OPTIONS), after=lambda e: check_queue(ctx, vc))
         else:
-            await ctx.send("Пошел нахуй")
+            return await ctx.send("Пошел нахуй")
 
 
 @bot.command()
@@ -65,8 +65,8 @@ async def stop(ctx):
         if ctx.message.author.id in access_ids:
             await ctx.guild.voice_client.disconnect()
         else:
-            await ctx.send("Похую")
+            return await ctx.send("Похую")
     else:
-        await ctx.send("Иди нахуй")
+        return await ctx.send("Иди нахуй")
 
 bot.run(os.getenv('TOKEN'))
