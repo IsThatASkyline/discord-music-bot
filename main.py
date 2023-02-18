@@ -1,6 +1,6 @@
 import discord, os
 from discord.ext import commands
-from youtube_dl import YoutubeDL
+from yt_dlp import YoutubeDL
 
 YDL_OPTIONS = {'format': 'worstaudio/best', 'noplaylist': 'False', 'simulate': 'True', 'key': 'FFmpegExtractAudio'}
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
