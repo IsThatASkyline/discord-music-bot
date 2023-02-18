@@ -2,7 +2,7 @@ import discord, os
 from discord.ext import commands
 from yt_dlp import YoutubeDL
 
-YDL_OPTIONS = {'format': 'worstaudio/best', 'noplaylist': 'False', 'simulate': 'True', 'key': 'FFmpegExtractAudio'}
+# YDL_OPTIONS = {'format': 'worstaudio/best', 'noplaylist': 'False', 'simulate': 'True', 'key': 'FFmpegExtractAudio'}
 FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5', 'options': '-vn'}
 
 intents = discord.Intents.default()
@@ -34,12 +34,11 @@ async def play(ctx, url):
         return await ctx.send("Ты пидр")
     elif ctx.guild.voice_client and ctx.voice_client.is_playing() is True:
         if ctx.message.author.id in access_ids:
-            with YoutubeDL(YDL_OPTIONS) as ydl:
+            with YoutubeDL() as ydl:
                 if 'https://' in url:
                     info = ydl.extract_info(url, download=False)
                 else:
                     info = ydl.extract_info(f'ytsearch:{url}', download=False)['entries'][0]
-
             link = info['formats'][0]['url']
             queue.append(link)
             return await ctx.send("Добавил твой трек в очередь")
@@ -47,14 +46,14 @@ async def play(ctx, url):
             await ctx.send("Иди нахуй хуесос")
     else:
         if ctx.message.author.id in access_ids:
-            with YoutubeDL(YDL_OPTIONS) as ydl:
+            with YoutubeDL() as ydl:
                 if 'https://' in url:
                     info = ydl.extract_info(url, download=False)
                 else:
                     info = ydl.extract_info(f'ytsearch:{url}', download=False)['entries'][0]
 
             link = info['formats'][0]['url']
-
+            print(link)
             vc.play(discord.FFmpegPCMAudio(source=link, **FFMPEG_OPTIONS), after=lambda e: check_queue(ctx, vc))
         else:
             await ctx.send("Пошел нахуй")
