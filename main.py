@@ -29,9 +29,9 @@ async def play(ctx, url):
         try:
             vc = await ctx.message.author.voice.channel.connect()
         except Exception:
-            return await ctx.send("Ты пидр")
+            return await ctx.send("Доступ запрещен")
     if ctx.author.voice is None:
-        return await ctx.send("Ты пидр")
+        return await ctx.send("Доступ запрещен")
     elif ctx.guild.voice_client and ctx.voice_client.is_playing() is True:
         if ctx.message.author.id in access_ids:
             with YoutubeDL(YDL_OPTIONS) as ydl:
@@ -43,7 +43,7 @@ async def play(ctx, url):
             queue.append(link)
             return await ctx.send("Добавил твой трек в очередь")
         else:
-            return await ctx.send("Иди нахуй хуесос")
+            return await ctx.send("Доступ запрещен")
     else:
         if ctx.message.author.id in access_ids:
             with YoutubeDL(YDL_OPTIONS) as ydl:
@@ -56,7 +56,7 @@ async def play(ctx, url):
             print(link)
             vc.play(discord.FFmpegPCMAudio(source=link, **FFMPEG_OPTIONS), after=lambda e: check_queue(ctx, vc))
         else:
-            return await ctx.send("Пошел нахуй")
+            return await ctx.send("Доступ запрещен")
 
 
 @bot.command()
@@ -65,8 +65,8 @@ async def stop(ctx):
         if ctx.message.author.id in access_ids:
             await ctx.guild.voice_client.disconnect()
         else:
-            return await ctx.send("Похую")
+            return await ctx.send("Доступ запрещен")
     else:
-        return await ctx.send("Иди нахуй")
+        return await ctx.send("Доступ запрещен")
 
 bot.run(os.getenv('TOKEN'))
